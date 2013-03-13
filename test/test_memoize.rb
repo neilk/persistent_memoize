@@ -29,10 +29,6 @@ class TC_Memoize < Test::Unit::TestCase
      f
    end
 
-   def test_version
-      assert_equal('1.3.1', Memoize::MEMOIZE_VERSION)
-   end
-
    def test_memoize
       assert_respond_to(self, :memoize)
       assert_nothing_raised{ fib(5) }
@@ -49,12 +45,12 @@ class TC_Memoize < Test::Unit::TestCase
    end
 
    def test_memoize_file_properties
-      assert_false(File.exists?(@file))
+      assert(!File.exists?(@file))
       assert_nothing_raised{ memoize(:fib, @file) }
-      assert_false(File.exists?(@file))
+      assert(!File.exists?(@file))
       assert_nothing_raised{ fib(10) }
-      assert_true(File.exists?(@file))
-      assert_true(File.size(@file) > 0)
+      assert(File.exists?(@file))
+      assert(File.size(@file) > 0)
    end
 
    # Ensure that a cache is returned, that it's a hash, and that each
