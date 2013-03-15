@@ -69,9 +69,21 @@ to the library that looks up those results, to cache them locally, via
 memoization. If I know that those blog postings have changed, then I 
 delete the cache, manually, and then it regenerates from scratch. 
 
-Caveat: as with all memoization, the method memoized must be _pure_, that
-is, the result depends solely on its arguments. memoizing a function which
+# Caveats
+
+As with all memoization, the method memoized must be _pure_, that
+is, the result depends solely on its arguments. Memoizing a function which
 returns the current date will give you the wrong answer tomorrow. 
+
+This can't magically make every method faster; it's all trade-offs. The
+thing-to-be-memoized should be more expensive than computing a hash, and 
+deserializing data from disk. Otherwise memoizing will make it slower.
+
+This depends on arguments having a unique serialization via the Marshal
+library. Certain Ruby constructs cannot be serialized in this way and 
+may raise TypeErrors. See the 
+[Marshal documentation](http://www.ruby-doc.org/core-2.0/Marshal.html) for details. 
+
 
 # Constants
     PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
