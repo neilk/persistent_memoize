@@ -35,13 +35,11 @@ So let's add memoization!
     
 Then you execute it!
 
-    $ fib.rb     # Still slow... in fact, slightly slower than before
+    $ fib.rb     # Noticeably faster 
 
-But again...
+And again...
    
     $ fib.rb     # WHOA ZOMG HOW DID THIS GET SO FAST
-    $ fib.rb     # LOOK AT HOW FAST IT IS
-    $ fib.rb     # I CAN'T BELIEVE THIS MY BRAIN IS MELTING 
 
 # Constants
     PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
