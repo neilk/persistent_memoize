@@ -7,15 +7,18 @@ require 'rubygems'
 gem 'test-unit'
 
 require 'test/unit'
+require 'fileutils'
 require 'memoize'
 
-class TC_Memoize < Test::Unit::TestCase
-   include Memoize
+class TC_PersistentMemoize < Test::Unit::TestCase
+   include PersistentMemoize
 
    def setup
-      @cache1 = nil
-      @cache2 = nil
-      @file   = File.join((ENV['HOME'] || ENV['USERPROFILE']), 'test.cache')
+      @path   = File.join((ENV['HOME'] || ENV['USERPROFILE']), 'test.cache')
+   end
+
+   def add(x, y)
+     return x + y
    end
 
    def fib(n)
@@ -30,47 +33,22 @@ class TC_Memoize < Test::Unit::TestCase
    end
 
    def test_memoize
-      assert_respond_to(self, :memoize)
       assert_nothing_raised{ fib(5) }
-      assert_nothing_raised{ memoize(:fib) }
-      assert_nothing_raised{ fib(50) }
-      assert_equal(55, fib(10))
-   end
-   
-   def test_memoize_with_file
-      assert_nothing_raised{ fib(5) }
-      assert_nothing_raised{ memoize(:fib, @file) }
+      assert_nothing_raised{ memoize(:fib, @path) }
       assert_nothing_raised{ fib(50) }
       assert_equal(55, fib(10))
    end
 
-   def test_memoize_file_properties
-      assert(!File.exists?(@file))
-      assert_nothing_raised{ memoize(:fib, @file) }
-      assert(!File.exists?(@file))
-      assert_nothing_raised{ fib(10) }
-      assert(File.exists?(@file))
-      assert(File.size(@file) > 0)
-   end
-
-   # Ensure that a cache is returned, that it's a hash, and that each
-   # memoized method retains its own cache properly.
-   def test_memoize_cache
-      assert_nothing_raised{ @cache1 = self.memoize(:fib) }
-      assert_nothing_raised{ @cache2 = self.memoize(:factorial) }
-
-      assert_nothing_raised{ self.fib(3) }
-      assert_nothing_raised{ self.factorial(3) }
-
-      assert_kind_of(Hash, @cache1)
-      assert_kind_of(Hash, @cache2)
-
-      assert_not_equal(@cache1, @cache2)
+   def test_memoize_directory_properties
+      assert(!File.exists?(@path), "path did not exist")
+      assert_nothing_raised{ memoize(:add, @path) }
+      assert(File.exists?(@path), "path does exist")
+      assert(Dir.entries(@path).select{ |f| f != '.' and f != '..' }.length == 0, "path is empty of files")
+      assert_nothing_raised{ add(10, 20) }
+      assert(Dir.entries(@path).select{ |f| f != '.' and f != '..' }.length == 1, "path has exactly one file")
    end
    
    def teardown
-      @cache1 = nil
-      @cache2 = nil
-      File.delete(@file) if File.exists?(@file)
+      FileUtils.remove_dir(@path) if File.exists?(@path)
    end
 end

@@ -1,25 +1,27 @@
-require 'thread'
+require 'digest/md5'
+require 'fileutils'
 
-module Memoize
-   # The version of the memoize library
-   MEMOIZE_VERSION = '1.3.2'
-   
-   @@lock = Mutex.new
-   
-   # Memoize the method +name+.  If +file+ is provided, then the method results
-   # are stored on disk as well as in memory.
-   def memoize(name, file=nil)
-      cache = File.open(file, 'rb'){ |io| Marshal.load(io) } rescue {}
+module PersistentMemoize
+  VERSION = '0.0.1'
 
-      (class<<self; self; end).send(:define_method, name) do |*args|
-         unless cache.has_key?(args)
-            cache[args] = super(*args)
-            @@lock.synchronize {
-               File.open(file, 'wb'){ |f| Marshal.dump(cache, f) } if file
-            }
-         end
-         cache[args]
+  # Memoize the method 'name', with results stored in files under 'path'
+  def memoize(name, path)
+    unless File.exists?(path)
+      FileUtils.mkdir_p(path)
+    end
+
+    (class<<self; self; end).send(:define_method, name) do |*args|
+      key = Digest::MD5.hexdigest(Marshal.dump(args))
+      cacheFile = File.join(path, key)
+      if File.exists?(cacheFile)
+        results = File.open(cacheFile, 'rb'){ |f| Marshal.load(f) }
+      else
+        results = super(*args)
+        File.open(cacheFile, 'wb'){ |f| Marshal.dump(results, f) }
       end
-      cache
-   end
+      results
+    end
+
+  end
+
 end
