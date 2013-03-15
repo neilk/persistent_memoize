@@ -2,7 +2,7 @@ require 'digest/md5'
 require 'fileutils'
 
 module PersistentMemoize
-  VERSION = '0.0.1'
+  PERSISTENT_MEMOIZE_VERSION = '0.0.1'
 
   # Memoize the method 'name', with results stored in files under 'path'
   def memoize(name, path)
