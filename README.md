@@ -79,8 +79,8 @@ This can't magically make every method faster; it's all trade-offs. The
 thing-to-be-memoized should be more expensive than computing a hash, and 
 deserializing data from disk. Otherwise memoizing will make it slower.
 
-This depends on arguments having a unique serialization via the Marshal
-library. Certain Ruby constructs cannot be serialized in this way and 
+This library assumes all arguments and results can be losslessly serialized 
+via the Marshal library. Certain Ruby constructs cannot be serialized in this way and 
 may raise TypeErrors. See the 
 [Marshal documentation](http://www.ruby-doc.org/core-2.0/Marshal.html) for details. 
 
