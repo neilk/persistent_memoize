@@ -7,20 +7,25 @@ up later invocations of your program.
 
 # Synopsis
 
-Let's imagine we have a slow script, _fib.rb_:
+Let's imagine we have a script, _fib.rb_:
 
     def fib(n)
       return n if n < 2
       fib(n-1) + fib(n-2)
     end
 
-    fib(100) 
+    puts fib(40) 
 
-Executing it is slow. 
+Executing it is slow - on my machine, this is 20 seconds!
     
-    $ fib.rb     # Slow 
+    $ time ruby fib.rb
+    102334155
 
-So let's add memoization!
+    real  0m20.107s
+    user  0m20.067s
+    sys 0m0.034s
+
+So let's add memoization.
 
     require 'persistent_memoize'
     include PersistentMemoize
@@ -30,16 +35,37 @@ So let's add memoization!
       fib(n-1) + fib(n-2)
     end
 
-    memoize(:fib, '/home/myself/fib-cache')
-    fib(100) 
-    
-Then you execute it!
+    memoize(:fib, './fib-cache')
+    puts fib(40) 
 
-    $ fib.rb     # Noticeably faster 
+And executing it now takes about a tenth of a second.
 
-And again...
-   
-    $ fib.rb     # WHOA ZOMG HOW DID THIS GET SO FAST
+    $ time ruby ./fib.rb
+    102334155
+
+    real  0m0.102s
+    user  0m0.062s
+    sys 0m0.036s
+
+What's more, it stays fast - subsequent invocations after the first one are even faster.
+
+    $ time ruby ./fib.rb
+    102334155
+
+    real  0m0.092s
+    user  0m0.060s
+    sys 0m0.029s
+
+# Motivation
+
+This library is most useful when you have a program that runs repeatedly,
+but which has to incorporate calculations or API results that rarely 
+change. 
+
+I use it to rebuild a static blog, which is based on my postings 
+on other sites. Those postings rarely change, and looking them up is 
+time-consuming, so it's easier to cache them all locally. But if they 
+do change, I just remove the cache files and regenerate the static blog.
 
 # Constants
     PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
@@ -58,6 +84,11 @@ value again.
 # Acknowledgements
 
 Based on memoize by Daniel Berg (https://github.com/djberg96/memoize)
+
+Daniel's library has a file-oriented cache but it creates a single cache file per
+method, containing all the cached results. For my workloads, this cache file 
+gets very large and rewriting it is slow. So persistent_memoize stores each result
+in its own file.
 
 Daniel also included this note in his code, so I might as well acknowledge 
 these people too:
