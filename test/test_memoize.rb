@@ -8,7 +8,7 @@ gem 'test-unit'
 
 require 'test/unit'
 require 'fileutils'
-require 'memoize'
+require 'persistent_memoize'
 
 class TC_PersistentMemoize < Test::Unit::TestCase
    include PersistentMemoize
