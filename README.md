@@ -63,9 +63,15 @@ but which has to incorporate calculations or API results that rarely
 change. 
 
 I use it to rebuild a static blog, which is based on my postings 
-on other sites. Those postings rarely change, and looking them up is 
-time-consuming, so it's easier to cache them all locally. But if they 
-do change, I just remove the cache files and regenerate the static blog.
+on other sites, fetched via API. If I tweak the look of the blog, I don't want to have to
+fetch all those postings all over again. So it's a quick modification
+to the library that looks up those results, to cache them locally, via
+memoization. If I know that those blog postings have changed, then I 
+delete the cache, manually, and then it regenerates from scratch. 
+
+Caveat: as with all memoization, the method memoized must be _pure_, that
+is, the result depends solely on its arguments. memoizing a function which
+returns the current date will give you the wrong answer tomorrow. 
 
 # Constants
     PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
