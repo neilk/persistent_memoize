@@ -7,7 +7,20 @@ up later invocations of your program.
 
 # Synopsis
 
-fib.rb:
+Let's imagine we have a slow script, _fib.rb_:
+
+    def fib(n)
+      return n if n < 2
+      fib(n-1) + fib(n-2)
+    end
+
+    fib(100) 
+
+Executing it is slow. 
+    
+    $ fib.rb     # Slow 
+
+So let's add memoization!
 
     require 'persistent_memoize'
     include PersistentMemoize
@@ -22,12 +35,13 @@ fib.rb:
     
 Then you execute it!
 
-    $ fib.rb     # Slow - slower than without memoization
+    $ fib.rb     # Still slow... in fact, slightly slower than before
 
 But again...
    
     $ fib.rb     # WHOA ZOMG HOW DID THIS GET SO FAST
     $ fib.rb     # LOOK AT HOW FAST IT IS
+    $ fib.rb     # I CAN'T BELIEVE THIS MY BRAIN IS MELTING 
 
 # Constants
     PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
