@@ -7,6 +7,8 @@ up later invocations of your program.
 
 # Synopsis
 
+fib.rb:
+
     require 'persistent_memoize'
     include PersistentMemoize
 
