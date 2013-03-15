@@ -33,11 +33,11 @@ But again...
 Returns the version of this package as a String.
 
 # Methods
-PersistentMemoize#memoize(method, path)
-Takes a +method+ (symbol) and caches the results of _method_, for 
+    PersistentMemoize#memoize(method, path)
+Takes a _method_ (symbol) and caches the results of _method_, for 
 particular arguments, on disk, in files under _path_. 
 
-If you call +method+ again with the same arguments, memoize gives
+If you call _method_ again with the same arguments, _memoize_ gives
 you the value from disk instead of letting the method compute the
 value again.
 
