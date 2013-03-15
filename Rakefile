@@ -1,7 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rbconfig'
-include Config
+include RbConfig
 
 namespace :gem do
   desc 'Build the memoize gem'
@@ -21,11 +21,6 @@ namespace :example do
   desc 'Run the fibonacci example & benchmarks'
   task :fib do
     ruby '-Ilib examples/example_fibonacci.rb'
-  end
-
-desc 'Run the memoize example & benchmarks'
-  task :memoize do
-    ruby '-Ilib examples/example_memoize.rb'
   end
 end
 
