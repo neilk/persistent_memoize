@@ -4,13 +4,13 @@ require 'rbconfig'
 include RbConfig
 
 namespace :gem do
-  desc 'Build the memoize gem'
+  desc 'Build the persistent_memoize gem'
   task :build do
-    spec = eval(IO.read('memoize.gemspec'))
+    spec = eval(IO.read('persistent_memoize.gemspec'))
     Gem::Builder.new(spec).build
   end
 
-  desc 'Install the memoize library'
+  desc 'Install the persistent_memoize library'
   task :install => [:build] do
     file = Dir['*.gem'].first
     sh 'gem install #{file}'
