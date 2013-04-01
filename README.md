@@ -98,7 +98,7 @@ may raise TypeErrors. See the
 
 
 ## Constants
-    PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
+    PersistentMemoize::VERSION
 
 Returns the version of this package as a String.
 
