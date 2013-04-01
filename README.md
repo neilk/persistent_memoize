@@ -1,11 +1,23 @@
-# Description
+# PersistentMemoize
+
+## Description
 Speed up methods at the cost of disk space. Keep caches on disk to speed
 up later invocations of your program.
 
-# Installation
-    gem install persistent_memoize
+## Installation
+Add this line to your application's Gemfile:
 
-# Synopsis
+    gem 'persistent_memoize'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install persistent_memoize
+
+## Synopsis
 
 Let's imagine we have a script, _fib.rb_:
 
@@ -56,7 +68,7 @@ What's more, it stays fast - subsequent invocations after the first one are even
     user  0m0.060s
     sys 0m0.029s
 
-# Motivation
+## Motivation
 
 This library is most useful when you have a program that runs repeatedly,
 but which has to incorporate calculations or API results that rarely 
@@ -69,7 +81,7 @@ to the library that looks up those results, to cache them locally, via
 memoization. If I know that those blog postings have changed, then I 
 delete the cache, manually, and then it regenerates from scratch. 
 
-# Caveats
+## Caveats
 
 As with all memoization, the method memoized must be _pure_, that
 is, the result depends solely on its arguments. Memoizing a function which
@@ -79,18 +91,18 @@ This can't magically make every method faster; it's all trade-offs. The
 thing-to-be-memoized should be more expensive than computing a hash, and 
 deserializing data from disk. Otherwise memoizing will make it slower.
 
-This library assumes all arguments and results can be losslessly serialized 
-via the Marshal library. Certain Ruby constructs cannot be serialized in this way and 
+This depends on arguments having a unique serialization via the Marshal
+library. Certain Ruby constructs cannot be serialized in this way and 
 may raise TypeErrors. See the 
 [Marshal documentation](http://www.ruby-doc.org/core-2.0/Marshal.html) for details. 
 
 
-# Constants
+## Constants
     PersistentMemoize::PERSISTENT_MEMOIZE_VERSION
 
 Returns the version of this package as a String.
 
-# Methods
+## Methods
     PersistentMemoize#memoize(method, path)
 Takes a _method_ (symbol) and caches the results of _method_, for 
 particular arguments, on disk, in files under _path_. 
@@ -99,7 +111,7 @@ If you call _method_ again with the same arguments, _memoize_ gives
 you the value from disk instead of letting the method compute the
 value again.
 
-# Acknowledgements
+## Acknowledgements
 
 Based on memoize by Daniel Berg (https://github.com/djberg96/memoize)
 
